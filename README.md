@@ -1,5 +1,7 @@
 # Keyboard
 
+![Keboard](https://dl.dropboxusercontent.com/s/8nrk4vs5pqrakeu/arduinolt2.jpg)
+
 This is a library to use a toy / education laptop keyboard with Arduino.
 
 The keyboard is 6 rows by 8 columns.
