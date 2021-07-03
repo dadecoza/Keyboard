@@ -7,15 +7,13 @@
 #include "Arduino.h"
 #include "Keyboard.h"
 
-unsigned char Keyboard::_mapping[8][6] = {
-      {52 ,82 ,68,67 ,42 ,42},
-      {51 ,69 ,83,88 ,32 ,42},
-      {53 ,84 ,70,86 ,13,42},
-      {49 ,81 ,42,104,27,8},
-      {56 ,73 ,74,77 ,57 ,48},
-      {50 ,87 ,65,90 ,42 ,42},
-      {54 ,89 ,71,66 ,75 ,76},
-      {55 ,85 ,72,78 ,79 ,80}
+unsigned char Keyboard::_mapping[6][9] = {
+      {'6', '7', '5', '2', 0, '8', '4', '3', '1'},
+      {'Y', 'U', 'T', 'W', 0, 'I', 'R', 'E', 'Q'},
+      {'G', 'H', 'F', 'A', 0, 'J', 'D', 'S',   0},
+      {'B', 'N', 'V', 'Z', 0, 'M', 'C', 'X',   0},
+      {'K', 'O',  13,   32, 0, '9',   0,   0,  27},
+      {'L', 'P',   0,   8, 0, '0',   0,   0,   0}
 };
 
 Keyboard::Keyboard(int reset,int clock, int row1, int row2,int row3,int row4, int row5, int row6)
@@ -37,15 +35,18 @@ Keyboard::Keyboard(int reset,int clock, int row1, int row2,int row3,int row4, in
   _pins[3] = row4;
   _pins[4] = row5;
   _pins[5] = row6;
+  _debounce = 0;
  }
  
  char Keyboard::read() {
+    if (_debounce > millis()) return NULL;
     reset();
-    for (int i=0;i<8;i++) {
+    for (int i=0;i<9;i++) {
         for (int n=0;n<6;n++) {
             int c = digitalRead(_pins[n]);
             if (c == 1) {
-                return _mapping[i][n];
+                _debounce = millis()+100;
+                return _mapping[n][i];
             }
         }
         clock();
@@ -58,7 +59,6 @@ Keyboard::Keyboard(int reset,int clock, int row1, int row2,int row3,int row4, in
     do {
         c = read();
     } while (c == NULL);
-    delay(150);
     return c;
  }
  

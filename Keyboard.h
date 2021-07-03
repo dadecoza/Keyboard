@@ -18,7 +18,8 @@ class Keyboard
     int _reset;
     int _clock;
     int _pins[6];
-    static unsigned char _mapping[8][6];
+    long _debounce;
+    static unsigned char _mapping[6][9];
     void clock();
     void reset();
 };
